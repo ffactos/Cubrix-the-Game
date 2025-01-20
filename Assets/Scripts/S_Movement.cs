@@ -82,13 +82,13 @@ public class S_Movement : MonoBehaviour
         onLeftSide = Physics.Raycast(leftHand.position, -leftHand.right, out leftHit, checkRadius, ground);
 
         if (onLeftSide && Input.GetKey(KeyCode.A) && AboveGround() && !isWallJumping)
-            rb.velocity = Vector3.Cross(leftHit.normal, transform.up) * speed * Time.fixedDeltaTime * yAxis;
+            rb.linearVelocity = Vector3.Cross(leftHit.normal, transform.up) * speed * Time.fixedDeltaTime * yAxis;
         else if (onRightSide && Input.GetKey(KeyCode.D) && AboveGround() && !isWallJumping)
-            rb.velocity = -Vector3.Cross(rightHit.normal, transform.up) * speed * Time.fixedDeltaTime * yAxis;
+            rb.linearVelocity = -Vector3.Cross(rightHit.normal, transform.up) * speed * Time.fixedDeltaTime * yAxis;
         else if (isWallJumping)
-            rb.velocity = leftHit.normal * jumpForce * 15f + new Vector3(0f, jumpForce / 10f, 0);
+            rb.linearVelocity = leftHit.normal * jumpForce * 15f + new Vector3(0f, jumpForce / 10f, 0);
         else
-            rb.velocity = new Vector3(input.x * speed * Time.fixedDeltaTime, rb.velocity.y, input.z * speed * Time.fixedDeltaTime);
+            rb.linearVelocity = new Vector3(input.x * speed * Time.fixedDeltaTime, rb.linearVelocity.y, input.z * speed * Time.fixedDeltaTime);
 
         transform.rotation = new Quaternion(transform.rotation.x, cam.transform.rotation.y, transform.rotation.z, transform.rotation.w);
 
@@ -129,8 +129,8 @@ public class S_Movement : MonoBehaviour
             }
             else
             {
-                if (rb.velocity.y < 0)
-                    rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                if (rb.linearVelocity.y < 0)
+                    rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
                 rb.AddForce(0, jumpForce, 0);
                 isGrounded = false;
                 isKickingDown = isGrounded;

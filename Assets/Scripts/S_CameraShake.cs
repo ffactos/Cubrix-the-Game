@@ -15,12 +15,16 @@ public class S_CameraShake : MonoBehaviour
     float lastDutch;
     [SerializeField]
     float changeDutch = .5f;
+    [SerializeField]
+    float powerDutch = 5f;
 
     float lastFOV;
     [SerializeField]
     float changeFOV = .5f;
 
     float zoomOffset = 0f;
+    [SerializeField]
+    float zoomAccelerationPower = 2.5f;
 
     CinemachinePOV pov;
 
@@ -35,8 +39,8 @@ public class S_CameraShake : MonoBehaviour
 
     private void Update()
     {
-        cinemachine.m_Lens.Dutch = Mathf.Lerp(lastDutch, -player.xAxis * 5f, changeDutch);
-        lastDutch = Mathf.Lerp(lastDutch, -player.xAxis * 5f, changeDutch);
+        cinemachine.m_Lens.Dutch = Mathf.Lerp(lastDutch, -player.xAxis * powerDutch, changeDutch);
+        lastDutch = Mathf.Lerp(lastDutch, -player.xAxis * powerDutch, changeDutch);
 
         if (Input.mouseScrollDelta.y > 0 && zoomOffset < 30f)
         {
@@ -51,16 +55,19 @@ public class S_CameraShake : MonoBehaviour
         {
             cinemachine.m_Lens.FieldOfView = Mathf.Lerp(lastFOV, 50f, changeFOV);
             lastFOV = Mathf.Lerp(lastFOV, 50f - zoomOffset, changeFOV);
-            pov.m_VerticalAxis.m_AccelTime = zoomOffset / 2.5f;
-            pov.m_VerticalAxis.m_DecelTime = zoomOffset / 2.5f;
-            pov.m_HorizontalAxis.m_AccelTime = zoomOffset / 2.5f;
-            pov.m_HorizontalAxis.m_DecelTime = zoomOffset / 2.5f;
+            if(zoomAccelerationPower != 0)
+            {
+                pov.m_VerticalAxis.m_AccelTime = zoomOffset / zoomAccelerationPower;
+                pov.m_VerticalAxis.m_DecelTime = zoomOffset / zoomAccelerationPower;
+                pov.m_HorizontalAxis.m_AccelTime = zoomOffset / zoomAccelerationPower;
+                pov.m_HorizontalAxis.m_DecelTime = zoomOffset / zoomAccelerationPower;
+            }
         }
 
         else
         {
-            cinemachine.m_Lens.FieldOfView = Mathf.Lerp(lastFOV, 90 + player.rb.velocity.magnitude, changeFOV);
-            lastFOV = Mathf.Lerp(lastFOV, 90 + player.rb.velocity.magnitude, changeFOV);
+            cinemachine.m_Lens.FieldOfView = Mathf.Lerp(lastFOV, 90 + player.rb.linearVelocity.magnitude, changeFOV);
+            lastFOV = Mathf.Lerp(lastFOV, 90 + player.rb.linearVelocity.magnitude, changeFOV);
             zoomOffset = 0f;
             pov.m_VerticalAxis.m_AccelTime = 0f;
             pov.m_VerticalAxis.m_DecelTime = 0f;

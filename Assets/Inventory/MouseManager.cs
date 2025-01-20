@@ -18,12 +18,9 @@ public class MouseManager : MonoBehaviour
         Item currentActiveItem = currentSlot.item;
 
         if ((currentlyHeld != null 
-            && currentActiveItem != null 
-            && currentlyHeld.itemName == currentActiveItem.itemName 
-            && currentlyHeld.stackable && currentlyHeld.value + currentActiveItem.value <= currentlyHeld.stack))
+            && currentActiveItem != null) && currentSlot.item.itemName == currentlyHeld.itemName)
         {
             currentSlot.inventoryManager.StackInInventory(currentSlot, currentlyHeld);
-            currentlyHeld = null;
             return;
         }
 

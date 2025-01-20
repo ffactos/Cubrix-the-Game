@@ -12,12 +12,27 @@ public class InventoryManager : MonoBehaviour
     [SerializeField]
     GameObject Content;
 
+    //                                            51      |       50
     public void StackInInventory(UISlotHandler currentSlot, Item item)
     {
         if(currentSlot.item.stackable && currentSlot.item.value + item.value <= item.stack)
         {
             currentSlot.item.value += item.value;
             currentSlot.itemCountText.text = currentSlot.item.value.ToString();
+            item = null;
+        }
+        else if(currentSlot.item.value <= item.value)
+        {
+            item.value = currentSlot.item.value + item.value - currentSlot.item.stack;
+            currentSlot.item.value = currentSlot.item.stack;
+            currentSlot.itemCountText.text = currentSlot.item.value.ToString();
+        }
+        else
+        {
+            int space = currentSlot.item.value;
+            currentSlot.item.value = item.value;
+            currentSlot.itemCountText.text = currentSlot.item.value.ToString();
+            item.value = space;
         }
     }
     public void PlaceInInventory(UISlotHandler currentSlot, Item item)
@@ -26,7 +41,6 @@ public class InventoryManager : MonoBehaviour
         currentSlot.icon.sprite = item.icon;
         currentSlot.itemCountText.text = item.value.ToString();
         currentSlot.icon.gameObject.SetActive(true);
-
     }
 
     public void AddInInventory(Item item)
@@ -44,6 +58,7 @@ public class InventoryManager : MonoBehaviour
                     slot.itemCountText.text = slot.item.value.ToString();
                     Debug.Log("1");
                     isAdded = true;
+                    break;
                 }
             }
             if (!isAdded)

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3896957153332237120}
   - component: {fileID: 2041712568601966340}
   - component: {fileID: 1212463549264517989}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gold Bag
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -9,7 +9,7 @@ public class S_JumpPad : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            collision.gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             collision.gameObject.GetComponent<Rigidbody>().AddForce(0, collision.gameObject.GetComponent<S_Movement>().jumpForce * 3, 0);
             collision.gameObject.GetComponentInParent<S_Movement>().curJumps = collision.gameObject.GetComponentInParent<S_Movement>().maxJumps;
             collision.gameObject.GetComponentInParent<S_Movement>().jumpCounter.DOComplete();

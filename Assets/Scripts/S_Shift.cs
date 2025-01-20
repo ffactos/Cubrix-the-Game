@@ -97,7 +97,7 @@ public class S_Shift : MonoBehaviour
 
         if (isShifting)
         {
-            rb.velocity = new Vector3(shiftSpeed * Time.deltaTime * input.x, 0, shiftSpeed * Time.deltaTime * input.z);
+            rb.linearVelocity = new Vector3(shiftSpeed * Time.deltaTime * input.x, 0, shiftSpeed * Time.deltaTime * input.z);
         }
     }
 

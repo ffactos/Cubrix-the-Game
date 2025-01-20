@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 5128567899133786163}
   - component: {fileID: 8292298208389532825}
   - component: {fileID: 2272620637717323023}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Kirill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
