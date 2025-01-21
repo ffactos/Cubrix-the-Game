@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UIElements;
 
 public class PlayerStats : MonoBehaviour
@@ -24,6 +25,10 @@ public class PlayerStats : MonoBehaviour
     public float maxHealth = 100f;
     public float health;
 
+    public float lastCa;
+    public bool right;
+    ChromaticAberration ca;
+
     public UnityEngine.UI.Slider healthCounter;
     public UnityEngine.UI.Slider background;
 
@@ -34,6 +39,7 @@ public class PlayerStats : MonoBehaviour
         healthCounter.value = health;
         background.maxValue = maxHealth;
         background.value = health;
+        ca = gameObject.GetComponent<PostProcessVolume>().profile.GetSetting<ChromaticAberration>();
     }
 
     private void Update()
@@ -48,6 +54,31 @@ public class PlayerStats : MonoBehaviour
         {
             healElapse = 0;
             Heal(heal/10);
+        }
+
+        
+        if(health < maxHealth / 100 * 20)
+        {
+            if (right)
+            {
+                ca.intensity.value = Mathf.Lerp(ca.intensity.value, ca.intensity.value + .5f, .1f);
+                if(ca.intensity.value > 1 + maxHealth/100*20 - health)
+                {
+                    right = false;
+                }
+            }
+            else
+            {
+                ca.intensity.value = Mathf.Lerp(ca.intensity.value, ca.intensity.value - .5f, .1f);
+                if (ca.intensity.value < .1f)
+                {
+                    right = true;
+                }
+            }
+        }
+        else
+        {
+            ca.intensity.value = 0f;
         }
     }
 

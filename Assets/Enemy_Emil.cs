@@ -19,9 +19,9 @@ public class Enemy_Emil : MonoBehaviour
     public Animator animator;
 
     public bool playerGettingDamage = false;
-
     private float attackElapse = 0.0f;
-
+    public float handDamage = 50f;
+    public float handAttackRadius = 5f;
     private float changePositionElapse = 0.0f;
 
     public float findPathCD = 1f;
@@ -33,15 +33,31 @@ public class Enemy_Emil : MonoBehaviour
 
     PlayerStats player;
 
+    public AnimationEvent handAttack;
+
     private void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         player = playerTransform.GetComponent<PlayerStats>();
         emil = GetComponent<NavMeshAgent>();
         stats = GetComponent<EnemyStats>();
+        handAttack.functionName = "HandAttack";
     }
     private void Update()
     {
+        if (Vector3.Distance(self.transform.position, playerTransform.position) < handAttackRadius)
+        {
+            emil.isStopped = true;
+            emil.transform.LookAt(playerTransform);
+            animator.SetBool("isAttacking", true);
+        }
+        else
+        {
+            emil.isStopped = false;
+            animator.SetBool("isAttacking", false);
+            
+        }
+
         if (Vector3.Distance(self.transform.position, playerTransform.position) < stats.locateDistance)
         {
             emil.destination = playerTransform.position;
@@ -124,5 +140,16 @@ public class Enemy_Emil : MonoBehaviour
         }
 
         result = Vector3.zero; return false;
+    }
+    public void HandAttack()
+    {
+        foreach (var collider in Physics.OverlapSphere(transform.position, handAttackRadius))
+        {
+            PlayerStats stats = collider.gameObject.GetComponent<PlayerStats>();
+            if (stats != null)
+            {
+                stats.Damage(handDamage);
+            }
+        }
     }
 }
